@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="cn">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>
+    <title>PC</title>
+</head>
+
+<body>
+    <canvas id="canvas" style="position: absolute; left: 0px; top: 0px" width="1920" height="1080"></canvas>
+    <script language="JavaScript">
+        // canvas
+        var canvas = document.getElementById("canvas");
+        var context = canvas.getContext("2d");
+        var img = new Image();
+        img.src = "./screenshot?temp=" + Math.random();
+        img.onload = () => {
+            context.drawImage(img, 0, 0);
+        };
+        // click listener
+        canvas.addEventListener("click", (clickEvent) => {
+            // point
+            point = {
+                x: clickEvent.offsetX,
+                y: clickEvent.offsetY
+            }
+
+            // draw
+            img.src = "./screenshot?type=click&clickX=" + point.x + "&clickY=" + point.y + "&random=" + Math.random();
+            img.onload = () => {
+                context.drawImage(img, 0, 0);
+            };
+        });
+
+        // dblclick listener
+        canvas.addEventListener('touchstart', (doubleClickEvent) => {
+            // point
+            point = {
+                x: clickEvent.offsetX,
+                y: clickEvent.offsetY
+            }
+            
+            // draw
+            img.src = "./screenshot?type=dblclick&clickX=" + point.x + "&clickY=" + point.y + "&random=" + Math.random();
+            img.onload = () => {
+                context.drawImage(img, 0, 0);
+            };
+        }, false)
+
+    </script>
+</body>
+
+</html>
