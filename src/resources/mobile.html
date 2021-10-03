@@ -12,6 +12,17 @@
 <body>
     <canvas id="canvas" style="position: absolute; left: 0px; top: 0px" width="1080" height="1920"></canvas>
     <script language="JavaScript">
+        //getQueryString
+        function getQueryString(name) {
+            var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) {
+                return unescape(r[2]);
+            }
+            return null;
+        }
+
+        canClick = getQueryString("CanClick") == "true"
         // canvas
         var canvas = document.getElementById("canvas");
         var context = canvas.getContext("2d");
@@ -31,7 +42,11 @@
             }
 
             // draw
-            img.src = "./screenshot?type=click&clickX=" + point.x + "&clickY=" + point.y + "&random=" + Math.random();
+            if (canClick) {
+                img.src = "./screenshot?type=click&clickX=" + point.x + "&clickY=" + point.y + "&random=" + Math.random();
+            } else {
+                img.src = "./screenshot?random=" + Math.random();
+            }
             img.onload = () => {
                 context.drawImage(img, -1920, -1080, 1920, 1080);
             };
@@ -44,9 +59,13 @@
                 x: 1920 - clickEvent.offsetY,
                 y: clickEvent.offsetX
             }
-            
+
             // draw
-            img.src = "./screenshot?type=dblclick&clickX=" + point.x + "&clickY=" + point.y + "&random=" + Math.random();
+            if (canClick) {
+                img.src = "./screenshot?type=dblclick&clickX=" + point.x + "&clickY=" + point.y + "&random=" + Math.random();
+            } else {
+                img.src = "./screenshot?random=" + Math.random();
+            }
             img.onload = () => {
                 context.drawImage(img, -1920, -1080, 1920, 1080);
             };
