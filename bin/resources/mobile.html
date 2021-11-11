@@ -6,11 +6,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>
-    <title>PC</title>
+    <title>Mobile</title>
 </head>
 
 <body>
-    <canvas id="canvas" style="position: absolute; left: 0px; top: 0px" width="1920" height="1080"></canvas>
+    <canvas id="canvas" style="position: absolute; left: 0px; top: 0px" width="1080" height="1920"></canvas>
     <script language="JavaScript">
         //getQueryString
         function getQueryString(name) {
@@ -23,75 +23,52 @@
         }
 
         canClick = getQueryString("CanClick") == "true"
-
         // canvas
         var canvas = document.getElementById("canvas");
         var context = canvas.getContext("2d");
         var img = new Image();
         img.src = "./screenshot?temp=" + Math.random();
         img.onload = () => {
-            context.drawImage(img, 0, 0);
+            context.translate(1080, 0);
+            context.rotate(Math.PI / -2);
+            context.drawImage(img, -1920, -1080, 1920, 1080);
         };
-
         // click listener
         canvas.addEventListener("click", (clickEvent) => {
             // point
             point = {
-                x: clickEvent.offsetX,
-                y: clickEvent.offsetY
+                x: 1920 - clickEvent.offsetY,
+                y: clickEvent.offsetX
             }
+
             // draw
             if (canClick) {
                 img.src = "./screenshot?type=click&clickX=" + point.x + "&clickY=" + point.y + "&random=" + Math.random();
             } else {
                 img.src = "./screenshot?random=" + Math.random();
             }
-
             img.onload = () => {
-                context.drawImage(img, 0, 0);
+                context.drawImage(img, -1920, -1080, 1920, 1080);
             };
-
         });
 
-        // dbclick listener
-        canvas.addEventListener('dblclick', (doubleClickEvent) => {
+        // dblclick listener
+        canvas.addEventListener('touchstart', (doubleClickEvent) => {
             // point
             point = {
-                x: doubleClickEvent.offsetX,
-                y: doubleClickEvent.offsetY
+                x: 1920 - clickEvent.offsetY,
+                y: clickEvent.offsetX
             }
+
             // draw
             if (canClick) {
-                img.src = "./screenshot?type=dbclick&clickX=" + point.x + "&clickY=" + point.y + "&random=" + Math.random();
+                img.src = "./screenshot?type=dblclick&clickX=" + point.x + "&clickY=" + point.y + "&random=" + Math.random();
             } else {
                 img.src = "./screenshot?random=" + Math.random();
             }
-
             img.onload = () => {
-                context.drawImage(img, 0, 0);
+                context.drawImage(img, -1920, -1080, 1920, 1080);
             };
-
-        }, false)
-
-        // rclick listener
-        canvas.addEventListener('contextmenu', (contextmenuEvent) => {
-            // point
-            point = {
-                x: contextmenuEvent.offsetX,
-                y: contextmenuEvent.offsetY
-            }
-            window.event.returnValue=false;  
-            // draw
-            if (canClick) {
-                img.src = "./screenshot?type=rclick&clickX=" + point.x + "&clickY=" + point.y + "&random=" + Math.random();
-            } else {
-                img.src = "./screenshot?random=" + Math.random();
-            }
-
-            img.onload = () => {
-                context.drawImage(img, 0, 0);
-            };
-
         }, false)
 
     </script>

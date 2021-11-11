@@ -18,9 +18,9 @@ func main() {
 	}
 	gin.SetMode(gin.ReleaseMode)
 	r := gin.Default()
-	r.StaticFile("/", "./index.html")
-	r.StaticFile("/pc.html", "./pc.html")
-	r.StaticFile("/mobile.html", "./mobile.html")
+	r.StaticFile("/", "./resources/index.html")
+	r.StaticFile("/pc.html", "./resources/pc.html")
+	r.StaticFile("/mobile.html", "./resources/mobile.html")
 	// 	r.GET("/", func(c *gin.Context) {
 	// 		c.Header("Content-Type", "text/html; charset=utf-8")
 	// 		c.String(200, `<!DOCTYPE html>
@@ -81,6 +81,15 @@ func main() {
 				log.Printf("双击(%v,%v)\n", clickX, clickY)
 				// robotgo.MoveMouseSmooth(clickX, clickY, 0.1, 0.1)
 				robotgo.MoveClick(clickX, clickY, `left`, true)
+			}
+		}
+		if c.Query("type") == "rclick" {
+			clickX, _ := strconv.Atoi(c.Query("clickX"))
+			clickY, err := strconv.Atoi(c.Query("clickY"))
+			if err == nil {
+				log.Printf("右击(%v,%v)\n", clickX, clickY)
+				// robotgo.MoveMouseSmooth(clickX, clickY, 0.1, 0.1)
+				robotgo.MoveClick(clickX, clickY, `right`, false)
 			}
 		}
 
