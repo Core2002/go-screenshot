@@ -53,16 +53,37 @@
 
         });
 
-        // dblclick listener
-        canvas.addEventListener('touchstart', (doubleClickEvent) => {
+        // dbclick listener
+        canvas.addEventListener('dblclick', (doubleClickEvent) => {
             // point
             point = {
-                x: clickEvent.offsetX,
-                y: clickEvent.offsetY
+                x: doubleClickEvent.offsetX,
+                y: doubleClickEvent.offsetY
             }
             // draw
             if (canClick) {
-                img.src = "./screenshot?type=dblclick&clickX=" + point.x + "&clickY=" + point.y + "&random=" + Math.random();
+                img.src = "./screenshot?type=dbclick&clickX=" + point.x + "&clickY=" + point.y + "&random=" + Math.random();
+            } else {
+                img.src = "./screenshot?random=" + Math.random();
+            }
+
+            img.onload = () => {
+                context.drawImage(img, 0, 0);
+            };
+
+        }, false)
+
+        // rclick listener
+        canvas.addEventListener('contextmenu', (contextmenuEvent) => {
+            // point
+            point = {
+                x: contextmenuEvent.offsetX,
+                y: contextmenuEvent.offsetY
+            }
+            window.event.returnValue=false;  
+            // draw
+            if (canClick) {
+                img.src = "./screenshot?type=rclick&clickX=" + point.x + "&clickY=" + point.y + "&random=" + Math.random();
             } else {
                 img.src = "./screenshot?random=" + Math.random();
             }
