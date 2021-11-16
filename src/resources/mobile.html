@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <title>Mobile</title>
 </head>
 
@@ -25,21 +26,30 @@
         canClick = getQueryString("CanClick") == "true"
         // canvas
         var canvas = document.getElementById("canvas");
+        var Resolution = "x,y"
+        var x, y
+        axios.get("/getinfo").then(response => {
+            Resolution = response.data["Resolution"]
+            x = Number(canvas.height = Resolution.split(",")[0])
+            y = Number(canvas.width = Resolution.split(",")[1])
+            console.log("X=", x, "y=", y)
+        })
         var context = canvas.getContext("2d");
         var img = new Image();
         img.src = "./screenshot?temp=" + Math.random();
         img.onload = () => {
-            context.translate(1080, 0);
+            context.translate(y, 0);
             context.rotate(Math.PI / -2);
-            context.drawImage(img, -1920, -1080, 1920, 1080);
+            context.drawImage(img, -x, -y, x, y);
         };
         // click listener
         canvas.addEventListener("click", (clickEvent) => {
             // point
             point = {
-                x: 1920 - clickEvent.offsetY,
+                x: x - clickEvent.offsetY,
                 y: clickEvent.offsetX
             }
+            console.log(point, clickEvent.offsetX, clickEvent.offsetY)
 
             // draw
             if (canClick) {
@@ -48,15 +58,15 @@
                 img.src = "./screenshot?random=" + Math.random();
             }
             img.onload = () => {
-                context.drawImage(img, -1920, -1080, 1920, 1080);
+                context.drawImage(img, -x, -y, x, y);
             };
         });
 
         // dblclick listener
-        canvas.addEventListener('touchstart', (doubleClickEvent) => {
+        canvas.addEventListener('dblclick', (doubleClickEvent) => {
             // point
             point = {
-                x: 1920 - clickEvent.offsetY,
+                x: x - clickEvent.offsetY,
                 y: clickEvent.offsetX
             }
 
@@ -67,7 +77,26 @@
                 img.src = "./screenshot?random=" + Math.random();
             }
             img.onload = () => {
-                context.drawImage(img, -1920, -1080, 1920, 1080);
+                context.drawImage(img, -x, -y, x, y);
+            };
+        }, false)
+
+        // rclick listener
+        canvas.addEventListener('contextmenu', (contextmenuEvent) => {
+            // point
+            point = {
+                x: x - clickEvent.offsetY,
+                y: clickEvent.offsetX
+            }
+            window.event.returnValue = false;
+            // draw
+            if (canClick) {
+                img.src = "./screenshot?type=rclick&clickX=" + point.x + "&clickY=" + point.y + "&random=" + Math.random();
+            } else {
+                img.src = "./screenshot?random=" + Math.random();
+            }
+            img.onload = () => {
+                context.drawImage(img, -x, -y, x, y);
             };
         }, false)
 

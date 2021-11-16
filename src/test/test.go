@@ -2,13 +2,10 @@ package main
 
 import (
 	"fmt"
-	"go_screenshot/src/middleware"
+	"github.com/go-vgo/robotgo"
 )
 
 func main() {
-	for {
-		middleware.ScreenShotRGBA()
-		fmt.Println("ojbk")
-	}
-
+	fmt.Println(robotgo.GetScaleSize())
+	robotgo.MoveClick(1323, 703, `left`, false)
 }

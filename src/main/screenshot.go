@@ -3,6 +3,7 @@ package main
 import (
 	"go_screenshot/src/middleware"
 	"log"
+	"net/http"
 	_ "net/http/pprof"
 	"os"
 	"strconv"
@@ -101,6 +102,10 @@ func main() {
 			page = 0
 		}
 		middleware.ImageToByte(c.Writer, middleware.ScreenShotRGBA()[page])
+	})
+	r.GET("getinfo", func(c *gin.Context) {
+		var x, y = robotgo.GetScaleSize()
+		c.JSON(http.StatusOK, gin.H{"Resolution": strconv.Itoa(x) + "," + strconv.Itoa(y)})
 	})
 	r.Run(ip)
 }

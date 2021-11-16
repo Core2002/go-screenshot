@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <title>PC</title>
 </head>
 
@@ -26,6 +27,14 @@
 
         // canvas
         var canvas = document.getElementById("canvas");
+        var Resolution = "1920,1080"
+        axios.get("/getinfo").then(response => {
+            Resolution = response.data["Resolution"]
+            canvas.width = Resolution.split(",")[0]
+            canvas.height = Resolution.split(",")[1]
+            console.log(Resolution)
+        })
+
         var context = canvas.getContext("2d");
         var img = new Image();
         img.src = "./screenshot?temp=" + Math.random();
@@ -80,7 +89,7 @@
                 x: contextmenuEvent.offsetX,
                 y: contextmenuEvent.offsetY
             }
-            window.event.returnValue=false;  
+            window.event.returnValue = false;
             // draw
             if (canClick) {
                 img.src = "./screenshot?type=rclick&clickX=" + point.x + "&clickY=" + point.y + "&random=" + Math.random();
