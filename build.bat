@@ -7,3 +7,4 @@ cd ./bin
 start ./screenshot_debug.exe
 cd ../
 go build -o bin\screenshot_rel.exe -ldflags="-H windowsgui" go_screenshot/src/main
+@REM gox -osarch="windows/386"

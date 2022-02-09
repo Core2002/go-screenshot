@@ -12,8 +12,15 @@ import (
 	"github.com/go-vgo/robotgo"
 )
 
+var owo float32
+
 func main() {
 	ip := ":8080"
+	// 初始化屏幕缩放率
+	awa, _ := robotgo.GetScaleSize()
+	qwq, _ := robotgo.GetScreenSize()
+	owo = float32(awa) / float32(qwq)
+
 	if len(os.Args) > 1 {
 		ip = os.Args[1]
 	}
@@ -70,27 +77,27 @@ func main() {
 			clickX, _ := strconv.Atoi(c.Query("clickX"))
 			clickY, err := strconv.Atoi(c.Query("clickY"))
 			if err == nil {
-				log.Printf("单击(%v,%v)\n", clickX, clickY)
-				// robotgo.MoveMouseSmooth(clickX, clickY, 0.1, 0.1)
-				robotgo.MoveClick(clickX, clickY, `left`, false)
+				log.Printf("单击(%v,%v)\n", zoom(clickX), zoom(clickY))
+				// robotgo.MoveMouseSmooth(zoom(clickX), zoom(clickY), 0.1, 0.1)
+				robotgo.MoveClick(zoom(clickX), zoom(clickY), `left`, false)
 			}
 		}
 		if c.Query("type") == "dbclick" {
 			clickX, _ := strconv.Atoi(c.Query("clickX"))
 			clickY, err := strconv.Atoi(c.Query("clickY"))
 			if err == nil {
-				log.Printf("双击(%v,%v)\n", clickX, clickY)
-				// robotgo.MoveMouseSmooth(clickX, clickY, 0.1, 0.1)
-				robotgo.MoveClick(clickX, clickY, `left`, true)
+				log.Printf("双击(%v,%v)\n", zoom(clickX), zoom(clickY))
+				// robotgo.MoveMouseSmooth(zoom(clickX), zoom(clickY), 0.1, 0.1)
+				robotgo.MoveClick(zoom(clickX), zoom(clickY), `left`, true)
 			}
 		}
 		if c.Query("type") == "rclick" {
 			clickX, _ := strconv.Atoi(c.Query("clickX"))
 			clickY, err := strconv.Atoi(c.Query("clickY"))
 			if err == nil {
-				log.Printf("右击(%v,%v)\n", clickX, clickY)
-				// robotgo.MoveMouseSmooth(clickX, clickY, 0.1, 0.1)
-				robotgo.MoveClick(clickX, clickY, `right`, false)
+				log.Printf("右击(%v,%v)\n", zoom(clickX), zoom(clickY))
+				// robotgo.MoveMouseSmooth(zoom(clickX), zoom(clickY), 0.1, 0.1)
+				robotgo.MoveClick(zoom(clickX), zoom(clickY), `right`, false)
 			}
 		}
 
@@ -108,4 +115,8 @@ func main() {
 		c.JSON(http.StatusOK, gin.H{"Resolution": strconv.Itoa(x) + "," + strconv.Itoa(y)})
 	})
 	r.Run(ip)
+}
+
+func zoom(z int) int {
+	return int(float32(z) / owo)
 }
